@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>GeoJSONLayer - 4.11</title>
+
+		<style>
+			html,
+			body,
+			#viewDiv {
+				padding: 0;
+				margin: 0;
+				height: 100%;
+				width: 100%;
+			}
+		</style>
+
+		<link rel="stylesheet" href="https://js.arcgis.com/4.11/esri/themes/light/main.css" />
+		<script src="https://js.arcgis.com/4.11/"></script>
+
+		<script>
+			require([
+				"esri/Map",
+				"esri/layers/GeoJSONLayer",
+				"esri/views/MapView",
+				"esri/widgets/Legend"
+			], function(Map, GeoJSONLayer, MapView, Legend) {
+
+				const url = "https://baizhixy.github.io/map/chinawgs84.json";
+				//const url ="https://skyezyx.github.io/population/chinawgs.json";
+
+				const renderer = {
+					"type": "class-breaks",
+					"field": "pop2000",
+					"legendOptions": {
+						title: "the population of the 2000"
+					},
+					"defaultSymbol": {
+						type: "simple-fill", // autocasts as new SimpleFillSymbol()
+						color: "black",
+						style: "backward-diagonal",
+						outline: {
+							width: 0.5,
+							color: [50, 50, 50, 0.6]
+						}
+					},
+					"defaultLabel": "no data",
+
+					"classBreakInfos": [{
+							"symbol": {
+								"color": "#AFEEEE",
+								"outline": {
+									"width": 0
+								},
+								"type": "simple-fill",
+								"style": "solid"
+							},
+							"label": "0 to 3000000",
+							"minValue": 0,
+							"maxValue": 3000000
+						},
+						{
+							"symbol": {
+								"color": "#7FFF00",
+								"outline": {
+									"width": 0
+								},
+								"type": "simple-fill",
+								"style": "solid"
+							},
+							"label": "> 3000000 to 10000000",
+							"minValue": 3000000,
+							"maxValue": 10000000
+						},
+						{
+							"symbol": {
+								"color": "#FFFF00",
+								"outline": {
+									"width": 0
+								},
+								"type": "simple-fill",
+								"style": "solid"
+							},
+							"label": "> 10000000 to 40000000",
+							"minValue": 10000000,
+							"maxValue": 40000000
+						},
+						{
+							"symbol": {
+								"color": "#FF8C00",
+								"outline": {
+									"width": 0
+								},
+								"type": "simple-fill",
+								"style": "solid"
+							},
+							"label": "> 40000000 to 80000000",
+							"minValue": 40000000,
+							"maxValue": 80000000
+						},
+						{
+							"symbol": {
+								"color": "#FF0000",
+								"outline": {
+									"width": 0
+								},
+								"type": "simple-fill",
+								"style": "solid"
+							},
+							"label": "> 80000000",
+							"minValue": 80000000,
+							"maxValue": 100000000
+						}
+					]
+				};
+
+				const geojsonLayer = new GeoJSONLayer({
+					url: url,
+					title: "population",
+					renderer: renderer
+				});
+
+				const map = new Map({
+					basemap: "gray",
+					layers: [geojsonLayer]
+				});
+
+				const view = new MapView({
+					container: "viewDiv",
+					center: [-168, 46],
+					zoom: 3,
+					map: map
+				});
+				
+				view.ui.add(
+				new Legend({
+					view: view
+				}),"bottom-left"
+			);
+			
+			});		
+		</script>
+	</head>
+
+	<body>
+		<div id="viewDiv"></div>
+	</body>
+
+</html>
